@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compressed Files</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- Importer jQuery -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        li:hover {
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Compressed Files</h1>
+        <p>Date and Time: {{ current_datetime }}</p>
+        <ul id="compressed-files">
+            {% for file in files %}
+                <li>{{ file }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        // Fonction pour actualiser la liste des fichiers compressés toutes les 60 secondes
+        function refreshFiles() {
+            $.ajax({
+                url: '/', // L'URL vers la vue Flask qui renvoie la liste des fichiers compressés
+                method: 'GET',
+                success: function(response) {
+                    $('#compressed-files').html($(response).find('#compressed-files').html());
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        // Actualiser la liste des fichiers compressés toutes les 60 secondes
+        $(document).ready(function() {
+            setInterval(refreshFiles, 30000); // Actualiser toutes les 60 secondes (60000 millisecondes)
+        });
+    </script>
+</body>
+</html>
